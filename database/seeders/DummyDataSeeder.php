@@ -10,7 +10,6 @@ use App\Models\Project;
 use App\Models\ProjectItem;
 use App\Models\User;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\Hash;
 
 class DummyDataSeeder extends Seeder
 {
@@ -50,15 +49,15 @@ class DummyDataSeeder extends Seeder
             'client_id' => $clients->random()->id,
             'marketing_id' => $users['Marketing']->id,
             'status' => 'pending',
-            'progress' => 5, // Sedikit progress karena desain selesai
+            'progress' => 5,
         ]);
         ProjectItem::factory()->count(3)->create(['project_id' => $project2->id]);
-        Design::factory()->create([
+        Design::create([
             'project_id' => $project2->id,
             'studio_id' => $users['Studio']->id,
             'status' => 'approved',
-            'initial_file_path' => 'https://example.com/file/initial.zip',
-            'final_file_path' => 'https://example.com/file/final.zip',
+            'initial_file_path' => 'https://example.com/file/initial2.zip',
+            'final_file_path' => 'https://example.com/file/final2.zip',
             'approved_at' => now(),
         ]);
 
@@ -70,21 +69,23 @@ class DummyDataSeeder extends Seeder
             'progress' => 45,
         ]);
         ProjectItem::factory()->count(4)->create(['project_id' => $project3->id, 'progress' => 45, 'status' => 'Assembling']);
-        Design::factory()->create([
+        Design::create([
             'project_id' => $project3->id,
             'studio_id' => $users['Studio']->id,
             'status' => 'approved',
-            'initial_file_path' => 'https://example.com/file/initial.zip',
-            'final_file_path' => 'https://example.com/file/final.zip',
+            'initial_file_path' => 'https://example.com/file/initial3.zip',
+            'final_file_path' => 'https://example.com/file/final3.zip',
             'approved_at' => now()->subDays(5),
         ]);
-        Invoice::factory()->create([
+        Invoice::create([
             'project_id' => $project3->id,
             'finance_id' => $users['Keuangan']->id,
+            'invoice_number' => 'INV-DUMMY-001',
             'description' => 'Pembayaran Termin 1 (30%)',
             'amount' => 30000000,
             'status' => 'paid',
             'paid_at' => now()->subDays(3),
+            'due_date' => now()->subDays(3)
         ]);
 
         // --- Proyek 4: Siap Kirim (Tahap Delivery) ---
@@ -95,12 +96,20 @@ class DummyDataSeeder extends Seeder
             'progress' => 100,
         ]);
         ProjectItem::factory()->count(2)->create(['project_id' => $project4->id, 'progress' => 100, 'status' => 'Packed']);
-        Design::factory()->create(['project_id' => $project4->id, 'studio_id' => $users['Studio']->id, 'status' => 'approved']);
-        Invoice::factory()->count(2)->create(['project_id' => $project4->id, 'finance_id' => $users['Keuangan']->id, 'status' => 'paid']);
-        Delivery::factory()->create([
+        Design::create([ // DIPERBAIKI
+            'project_id' => $project4->id,
+            'studio_id' => $users['Studio']->id,
+            'status' => 'approved',
+            'initial_file_path' => 'https://example.com/file/initial4.zip',
+            'final_file_path' => 'https://example.com/file/final4.zip',
+        ]);
+        Invoice::create(['project_id' => $project4->id, 'finance_id' => $users['Keuangan']->id, 'status' => 'paid', 'invoice_number' => 'INV-DUMMY-002', 'description' => 'DP 30%', 'amount' => 25000000, 'due_date' => now()]);
+        Invoice::create(['project_id' => $project4->id, 'finance_id' => $users['Keuangan']->id, 'status' => 'paid', 'invoice_number' => 'INV-DUMMY-003', 'description' => 'Termin 2 40%', 'amount' => 35000000, 'due_date' => now()]);
+        Delivery::create([
             'project_id' => $project4->id,
             'ppic_id' => $users['PPIC']->id,
             'status' => 'on_the_way',
+            'shipping_address' => 'Alamat Pengiriman Proyek 4'
         ]);
 
         // --- Proyek 5: Selesai (Completed) ---
@@ -111,14 +120,23 @@ class DummyDataSeeder extends Seeder
             'progress' => 100,
         ]);
         ProjectItem::factory()->count(3)->create(['project_id' => $project5->id, 'progress' => 100, 'status' => 'Installed']);
-        Design::factory()->create(['project_id' => $project5->id, 'studio_id' => $users['Studio']->id, 'status' => 'approved']);
-        Invoice::factory()->count(3)->create(['project_id' => $project5->id, 'finance_id' => $users['Keuangan']->id, 'status' => 'paid']);
-        Delivery::factory()->create([
+        Design::create([ // DIPERBAIKI
+            'project_id' => $project5->id,
+            'studio_id' => $users['Studio']->id,
+            'status' => 'approved',
+            'initial_file_path' => 'https://example.com/file/initial5.zip',
+            'final_file_path' => 'https://example.com/file/final5.zip',
+        ]);
+        Invoice::create(['project_id' => $project5->id, 'finance_id' => $users['Keuangan']->id, 'status' => 'paid', 'invoice_number' => 'INV-DUMMY-004', 'description' => 'DP 30%', 'amount' => 40000000, 'due_date' => now()]);
+        Invoice::create(['project_id' => $project5->id, 'finance_id' => $users['Keuangan']->id, 'status' => 'paid', 'invoice_number' => 'INV-DUMMY-005', 'description' => 'Termin 2 40%', 'amount' => 50000000, 'due_date' => now()]);
+        Invoice::create(['project_id' => $project5->id, 'finance_id' => $users['Keuangan']->id, 'status' => 'paid', 'invoice_number' => 'INV-DUMMY-006', 'description' => 'Pelunasan 30%', 'amount' => 40000000, 'due_date' => now()]);
+        Delivery::create([
             'project_id' => $project5->id,
             'ppic_id' => $users['PPIC']->id,
             'status' => 'handover_completed',
             'handover_document_path' => 'https://example.com/file/handover.pdf',
             'delivered_at' => now(),
+            'shipping_address' => 'Alamat Pengiriman Proyek 5'
         ]);
     }
 }
