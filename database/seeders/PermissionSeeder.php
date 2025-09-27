@@ -26,6 +26,9 @@ class PermissionSeeder extends Seeder
         Permission::create(['name' => 'upload design']);
         Permission::create(['name' => 'approve design']);
         Permission::create(['name' => 'manage revision']);
+        Permission::create(['name' => 'view assigned designs']);
+        Permission::create(['name' => 'upload final design']);
+        Permission::create(['name' => 'request revision']);
 
         // --- PERMISSIONS UNTUK KEUANGAN ---
         Permission::create(['name' => 'create invoice']);
@@ -33,6 +36,10 @@ class PermissionSeeder extends Seeder
 
         // --- PERMISSIONS UNTUK PENGIRIMAN ---
         Permission::create(['name' => 'manage delivery']);
+
+        // --- PERMISSIONS LAINNYA ---
+        Permission::create(['name' => 'confirm materials']);
+        Permission::create(['name' => 'upload payment proof']);
 
         // --- AMBIL ROLES YANG SUDAH ADA ---
         $marketingRole = Role::findByName('Marketing');
@@ -50,12 +57,16 @@ class PermissionSeeder extends Seeder
             'edit project',
             'approve design', // Marketing bisa approve atas nama client
             'delete project',
+            'request revision',
+            'upload payment proof'
         ]);
 
         $studioRole->givePermissionTo([
             'view project',
-            'upload design',
+            // 'upload design',
             'manage revision',
+            'view assigned designs',
+            'upload final design',
         ]);
 
         $produksiRole->givePermissionTo([
@@ -67,6 +78,7 @@ class PermissionSeeder extends Seeder
             'view project',
             'create invoice',
             'verify payment',
+            'upload payment proof',
         ]);
 
         $qcRole->givePermissionTo([
@@ -82,6 +94,7 @@ class PermissionSeeder extends Seeder
         $gudangRole->givePermissionTo([
             'view project',
             'update project status', // Misal: mengubah status dari 'pending' ke 'in_progress'
+            'confirm materials',
         ]);
     }
 }

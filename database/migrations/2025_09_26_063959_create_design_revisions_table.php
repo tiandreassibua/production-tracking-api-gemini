@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreignIdFor(Design::class)->constrained()->cascadeOnDelete();
             $table->integer('revision_number');
             $table->text('client_notes')->nullable();
-            $table->string('file_path')->comment('File revisi dari studio');
+            $table->string('file_path')->nullable()->comment('File revisi dari studio');
             $table->timestamps();
         });
     }
